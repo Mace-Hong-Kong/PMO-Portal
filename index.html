@@ -4,17 +4,65 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NDO PMO Analytics</title>
+
+    <link rel="preconnect" href="https://app.powerbi.com" crossorigin />
+    <link rel="preconnect" href="https://login.microsoftonline.com" crossorigin />
+    <link rel="preconnect" href="https://aadcdn.msauth.net" crossorigin />
+    <link rel="dns-prefetch" href="https://app.powerbi.com" />
+    <link rel="dns-prefetch" href="https://login.microsoftonline.com" />
+
     <script>
       const POWER_BI_URL =
         "https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi";
 
-      // Brief delay lets users see context before redirecting.
-      window.addEventListener("DOMContentLoaded", () => {
-        setTimeout(() => {
-          window.location.replace(POWER_BI_URL);
-        }, 1500);
-      });
+      const TOTAL_DELAY_MS = 1500;
+      const SESSION_KEY = "pmo-portal:redirected";
+
+      // sessionStorage can throw (Safari private mode, strict cookie policies,
+      // some embedded WebViews, file:// origins). Treat any failure as
+      // "first visit" so the interstitial still works.
+      function hasVisited() {
+        try {
+          return sessionStorage.getItem(SESSION_KEY) === "1";
+        } catch (_) {
+          return false;
+        }
+      }
+      function markVisited() {
+        try {
+          sessionStorage.setItem(SESSION_KEY, "1");
+        } catch (_) {
+          /* storage unavailable; safe to ignore */
+        }
+      }
+
+      // Returning visitors in the same session skip the interstitial entirely.
+      if (hasVisited()) {
+        window.location.replace(POWER_BI_URL);
+      } else {
+        markVisited();
+
+        // Anchor to navigation start so total time-to-redirect is constant
+        // regardless of how long the page itself took to load.
+        window.addEventListener("DOMContentLoaded", () => {
+          const elapsed = performance.now();
+          const remaining = Math.max(0, TOTAL_DELAY_MS - elapsed);
+
+          const bar = document.getElementById("progress-bar");
+          if (bar) {
+            bar.style.transitionDuration = remaining + "ms";
+            requestAnimationFrame(() => {
+              bar.style.width = "100%";
+            });
+          }
+
+          setTimeout(() => {
+            window.location.replace(POWER_BI_URL);
+          }, remaining);
+        });
+      }
     </script>
+
     <style>
       body {
         font-family: system-ui, sans-serif;
@@ -35,6 +83,20 @@
       a.button:hover {
         background: #106ebe;
       }
+      .progress {
+        margin-top: 1.5rem;
+        height: 4px;
+        width: 100%;
+        background: #eaeaea;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: #0078d4;
+        transition: width linear;
+      }
     </style>
   </head>
   <body>
@@ -44,6 +106,9 @@
       href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
       >Open dashboard now →</a
     >
+    <div class="progress" aria-hidden="true">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
     <noscript>
       <p>JavaScript is disabled. Use the button above to open the dashboard.</p>
     </noscript>
