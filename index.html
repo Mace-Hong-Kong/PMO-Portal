@@ -50,9 +50,11 @@
 
           const bar = document.getElementById("progress-bar");
           if (bar) {
+            bar.setAttribute("aria-valuenow", "0");
             bar.style.transitionDuration = remaining + "ms";
             requestAnimationFrame(() => {
               bar.style.width = "100%";
+              bar.setAttribute("aria-valuenow", "100");
             });
           }
 
@@ -71,9 +73,14 @@
         padding: 0 1rem;
         color: #222;
       }
+      .stack > * {
+        margin: 0;
+      }
+      .stack > * + * {
+        margin-top: 1rem;
+      }
       a.button {
         display: inline-block;
-        margin-top: 1rem;
         padding: 0.75rem 1.25rem;
         background: #0078d4;
         color: #fff;
@@ -83,8 +90,11 @@
       a.button:hover {
         background: #106ebe;
       }
+      a.button:focus-visible {
+        outline: 3px solid #106ebe;
+        outline-offset: 2px;
+      }
       .progress {
-        margin-top: 1.5rem;
         height: 4px;
         width: 100%;
         background: #eaeaea;
@@ -100,15 +110,27 @@
     </style>
   </head>
   <body>
-    <p>You are being redirected to the Power BI dashboard shortly.</p>
-    <a
-      class="button"
-      href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
-      >Open dashboard now →</a
-    >
-    <div class="progress" aria-hidden="true">
-      <div id="progress-bar" class="progress-bar"></div>
-    </div>
+    <main class="stack">
+      <div class="progress">
+        <div
+          id="progress-bar"
+          class="progress-bar"
+          role="progressbar"
+          aria-label="Redirect progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        ></div>
+      </div>
+      <p role="status" aria-live="polite">
+        You are being redirected to the Power BI dashboard shortly.
+      </p>
+      <a
+        class="button"
+        href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
+        >Open dashboard now →</a
+      >
+    </main>
     <noscript>
       <p>JavaScript is disabled. Use the button above to open the dashboard.</p>
     </noscript>
