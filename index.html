@@ -3,6 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https://app.powerbi.com https://login.microsoftonline.com https://aadcdn.msauth.net; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Permissions-Policy"
+      content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()"
+    />
     <title>NDO PMO Analytics</title>
 
     <link rel="preconnect" href="https://app.powerbi.com" crossorigin />
@@ -11,103 +20,8 @@
     <link rel="dns-prefetch" href="https://app.powerbi.com" />
     <link rel="dns-prefetch" href="https://login.microsoftonline.com" />
 
-    <script>
-      const POWER_BI_URL =
-        "https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi";
-
-      const TOTAL_DELAY_MS = 1500;
-      const SESSION_KEY = "pmo-portal:redirected";
-
-      // sessionStorage can throw (Safari private mode, strict cookie policies,
-      // some embedded WebViews, file:// origins). Treat any failure as
-      // "first visit" so the interstitial still works.
-      function hasVisited() {
-        try {
-          return sessionStorage.getItem(SESSION_KEY) === "1";
-        } catch (_) {
-          return false;
-        }
-      }
-      function markVisited() {
-        try {
-          sessionStorage.setItem(SESSION_KEY, "1");
-        } catch (_) {
-          /* storage unavailable; safe to ignore */
-        }
-      }
-
-      // Returning visitors in the same session skip the interstitial entirely.
-      if (hasVisited()) {
-        window.location.replace(POWER_BI_URL);
-      } else {
-        markVisited();
-
-        // Anchor to navigation start so total time-to-redirect is constant
-        // regardless of how long the page itself took to load.
-        window.addEventListener("DOMContentLoaded", () => {
-          const elapsed = performance.now();
-          const remaining = Math.max(0, TOTAL_DELAY_MS - elapsed);
-
-          const bar = document.getElementById("progress-bar");
-          if (bar) {
-            bar.setAttribute("aria-valuenow", "0");
-            bar.style.transitionDuration = remaining + "ms";
-            requestAnimationFrame(() => {
-              bar.style.width = "100%";
-              bar.setAttribute("aria-valuenow", "100");
-            });
-          }
-
-          setTimeout(() => {
-            window.location.replace(POWER_BI_URL);
-          }, remaining);
-        });
-      }
-    </script>
-
-    <style>
-      body {
-        font-family: system-ui, sans-serif;
-        max-width: 640px;
-        margin: 4rem auto;
-        padding: 0 1rem;
-        color: #222;
-      }
-      .stack > * {
-        margin: 0;
-      }
-      .stack > * + * {
-        margin-top: 1rem;
-      }
-      a.button {
-        display: inline-block;
-        padding: 0.75rem 1.25rem;
-        background: #0078d4;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 6px;
-      }
-      a.button:hover {
-        background: #106ebe;
-      }
-      a.button:focus-visible {
-        outline: 3px solid #106ebe;
-        outline-offset: 2px;
-      }
-      .progress {
-        height: 4px;
-        width: 100%;
-        background: #eaeaea;
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .progress-bar {
-        height: 100%;
-        width: 0%;
-        background: #0078d4;
-        transition: width linear;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <script src="./assets/redirect.js" defer></script>
   </head>
   <body>
     <main class="stack">
@@ -127,7 +41,9 @@
       </p>
       <a
         class="button"
+        data-dashboard-link
         href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
+        rel="noopener noreferrer"
         >Open dashboard now →</a
       >
     </main>
