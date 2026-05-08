@@ -3,8 +3,10 @@
     dashboardUrl:
       "https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi",
     progressBarId: "progress-bar",
+    manualLinkId: "manual-link",
     redirectedKey: "pmo-portal:redirected",
     redirectDelayMs: 1500,
+    manualLinkDelayMs: 4500,
   };
 
   function redirectToDashboard() {
@@ -35,6 +37,16 @@
     });
   }
 
+  function setManualLinkVisibility(isVisible) {
+    const manualLink = document.getElementById(config.manualLinkId);
+
+    if (!manualLink) {
+      return;
+    }
+
+    manualLink.hidden = !isVisible;
+  }
+
   function startProgressBar(remainingMs) {
     const bar = document.getElementById(config.progressBarId);
 
@@ -60,6 +72,8 @@
 
   function init() {
     syncDashboardLinks();
+    setManualLinkVisibility(false);
+    setTimeout(() => setManualLinkVisibility(true), config.manualLinkDelayMs);
 
     if (hasRedirectedThisSession()) {
       redirectToDashboard();

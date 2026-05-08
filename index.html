@@ -39,16 +39,26 @@
       <p role="status" aria-live="polite">
         You are being redirected to the Power BI dashboard shortly.
       </p>
-      <a
-        class="button"
-        data-dashboard-link
-        href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
-        rel="noopener noreferrer"
-        >Open dashboard now →</a
-      >
+      <p id="manual-link" class="manual-link">
+        Still here?
+        <a
+          data-dashboard-link
+          href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
+          rel="noopener noreferrer"
+          >Open dashboard manually.</a
+        >
+      </p>
     </main>
     <noscript>
-      <p>JavaScript is disabled. Use the button above to open the dashboard.</p>
+      <p>
+        JavaScript is disabled. Open the dashboard directly:
+        <a
+          data-dashboard-link
+          href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
+          rel="noopener noreferrer"
+          >Open dashboard.</a
+        >
+      </p>
     </noscript>
   </body>
 </html>
