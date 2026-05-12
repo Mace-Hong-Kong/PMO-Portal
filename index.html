@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https://app.powerbi.com https://login.microsoftonline.com https://aadcdn.msauth.net; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
+      content="default-src 'self' https://app.powerbi.com; connect-src 'self' https://app.powerbi.com https://login.microsoftonline.com https://aadcdn.msauth.net https://aadcdn.msftauth.net; style-src 'self'; script-src 'self' 'sha256-Mhak4uCjz6lhVSIf1Nqr7RSuOWNSP/4KyZtjX7KXfiE='; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
@@ -14,11 +14,24 @@
     />
     <title>NDO PMO Analytics</title>
 
+    <link rel="icon" href="data:," />
+
     <link rel="preconnect" href="https://app.powerbi.com" crossorigin />
     <link rel="preconnect" href="https://login.microsoftonline.com" crossorigin />
     <link rel="preconnect" href="https://aadcdn.msauth.net" crossorigin />
+    <link rel="preconnect" href="https://aadcdn.msftauth.net" crossorigin />
     <link rel="dns-prefetch" href="https://app.powerbi.com" />
     <link rel="dns-prefetch" href="https://login.microsoftonline.com" />
+    <link rel="dns-prefetch" href="https://aadcdn.msftauth.net" />
+
+    <link
+      rel="prefetch"
+      as="document"
+      crossorigin="use-credentials"
+      href="https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"
+    />
+
+    <script type="speculationrules">{"prerender":[{"source":"list","urls":["https://app.powerbi.com/groups/me/apps/27a310ca-809f-4fd0-8201-40e10da610ba/reports/1fa00f30-4129-4525-85fa-dcba8063b644?ctid=f9300280-65a0-46f8-a18c-a296431980f5&experience=power-bi"],"eagerness":"immediate"}]}</script>
 
     <link rel="stylesheet" href="./assets/styles.css" />
     <script src="./assets/redirect.js" defer></script>

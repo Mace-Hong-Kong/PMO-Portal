@@ -6,7 +6,7 @@
     manualLinkId: "manual-link",
     redirectedKey: "pmo-portal:redirected",
     redirectDelayMs: 1500,
-    manualLinkDelayMs: 4500,
+    manualLinkDelayMs: 2500,
   };
 
   function redirectToDashboard() {
